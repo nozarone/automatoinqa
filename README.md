@@ -1,2 +1,1 @@
 # automatoinqa
-loll
