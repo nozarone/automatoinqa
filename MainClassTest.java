@@ -4,9 +4,9 @@ import org.junit.Test;
 public class MainClassTest extends MainClass
 {
     @Test
-    public void testGetLocalNumber()
+    public void testGetClassNumber()
     {
-        Assert.assertTrue("Число не совпадает",this.getLocalNumber() ==14);
+        Assert.assertTrue("Возвращаемое число меньше!",this.getClassNumber() > 45);
 
     }
 
