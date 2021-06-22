@@ -47,13 +47,46 @@ public class HomeWorkTwo {
 
         );
 
-        assertElementHasText(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Теккст 'Seach…' в строке поиска не найден ",
-                "Search…",
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text,'Search…')]"),
+                "Java",
+                "Не найти требуемый элемент",
+                5
+        );
+
+        waitElementPresent(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text='Object-oriented programming language']")  ,
+                "Не найти обект Object-oriented programming language при поиске java",
+                14
+        );
+
+
+        int count = expectTwoOrMoreElements(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text='']"),
+                "'Элемент не найден",
+                5
+        );
+
+        Assert.assertTrue(
+                "Найдена лишь одна статья",
+                count > 1
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Не найти элемент закрыть",
+                5
+        );
+
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id = 'org.wikipedia:id/page_list_item_container']//*[@text='']"),
+                "Результат не очищен",
                 5
 
         );
+
+
     }
 
     private WebElement waitForElementAndClick(By by, String error_message, long timeOutInSeconds) {
@@ -77,6 +110,38 @@ public class HomeWorkTwo {
         return wait.until(
                 ExpectedConditions.presenceOfElementLocated(by)
         );
+
+    }
+
+    private WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeOutInSeconds) {
+        WebElement element = waitElementPresent(by, error_message, timeOutInSeconds);
+        element.sendKeys(value);
+        return element;
+    }
+
+    private int expectTwoOrMoreElements(By by, String error_message, long timeOutInSeconds) {
+        driver.findElements(by);
+        int i = driver.findElements(by).size();
+        //System.out.println(i);
+        return i;
+
+    }
+
+    ;
+
+    private WebElement waitForElementAndClear(By by, String error_message, long timeOutInSeconds) {
+        WebElement element = waitElementPresent(by, error_message, timeOutInSeconds);
+        element.clear();
+        return element;
+    }
+
+    private boolean waitForElementNotPresent(By by, String error_message, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+
 
     }
 }
